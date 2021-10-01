@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "aquarium_new",
+    "slug": "aquarium_new",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "aquarium_new"
+}
