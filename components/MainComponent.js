@@ -2,25 +2,26 @@ import React from 'react';
 import { Text, TextInput, View, ScrollView } from 'react-native';
 import {Input, Button, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
-import {fetchData, saveData, deleteData, createUser, getUser, signoutUser} from '../redux/ActionCreators';
-import * as SecureStore from 'expo-secure-store';
+import {getUser,getCart, getWish, getProduct} from '../redux/ActionCreators';
+import { addCartData, removeCartData } from '../firebase/functions';
 
 
 
 const mapStateToProps = state => {
     return {
         userSystemData: state.userSystemData,
-        userData: state.userData
+        cartData: state.cartData,
+        wishData: state.wishData,
+        prodData: state.prodData
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    fetchData: () => dispatch(fetchData()),
-    saveData: (data) => dispatch(saveData(data)),
-    deleteData: () => dispatch(deleteData()),
-    createUser: (email, password) => dispatch(createUser(email, password)),
     getUser: () => dispatch(getUser()),
-    signoutUser: () => dispatch(signoutUser())
+    getCart: (uid) => dispatch(getCart(uid)),
+    getWish: (uid) => dispatch(getWish(uid)),
+    getProduct: () => dispatch(getProduct())
+    
 })
 
 class Main extends React.Component {
@@ -35,15 +36,23 @@ class Main extends React.Component {
 
 
     handle() {
-        console.log("ExEcuted")
+        // console.log("ExEcuted")
         // this.props.createUser(this.state.username, this.state.password);
-        this.props.createUser("example4@gmail.com", "password");
+        // this.props.createUser("example11@gmail.com", "password", "kevin Paul");
         // this.props.getUser();
-        
+        // this.props.signoutUser();
+        // this.props.signinUser("example11@gmail.com", "password")
         // console.log()
+        // this.props.getCart("123");
+        // this.props.getWish("123");
+        // removeCartData("123").then(() => {
+        //         console.log("ExEcuted")
+        //     });
+        this.props.getProduct();
+
     }
     showLog() {
-        console.log(this.props.userData)
+        console.log(this.props.prodData)
     }
     render() {
         return(
@@ -69,6 +78,7 @@ class Main extends React.Component {
                 </View>
                 <View>
                     <Button 
+                    style={{marginTop: 10}}
                         onPress={() => this.showLog()}
                         title='Delete'
                         clear
