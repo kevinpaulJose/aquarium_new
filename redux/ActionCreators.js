@@ -63,13 +63,15 @@ export const getUser = () => (dispatch) => {
       userCollection.where("userid", "==", user.uid).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           dispatch(getUserSuccess(doc.data()));
-        })
+        }) 
       }).catch((error) => {
-        dispatch(getUserError("USR not logged in"));
+        dispatch(getUserSuccess(false));
+        dispatch(getUserError(true))
       })
       //  dispatch(getUserSuccess(userGot));
       } else {
-        dispatch(getUserError("USR not logged in"));
+        dispatch(getUserSuccess(false));
+        dispatch(getUserError(true))
       }
 
   };

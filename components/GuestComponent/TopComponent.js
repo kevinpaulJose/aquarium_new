@@ -7,6 +7,7 @@ import {
   ScreenWidth,
 } from "../Dimensions/dimensions";
 
+
 export default function TopComponent({ type }) {
   return (
     <View>
@@ -94,6 +95,7 @@ export default function TopComponent({ type }) {
           >
             <Image
               source={require("../../assets/coral1.jpg")}
+              
               style={{
                 width: (ScreenWidth - 150) / 2,
                 height: ScreenHeight / 2 / 2,

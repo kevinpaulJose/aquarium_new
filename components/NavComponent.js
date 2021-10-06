@@ -52,23 +52,23 @@ class Nav extends React.Component {
   showLog() {
     console.log(this.props.prodData);
   }
+
   componentDidMount() {
-    this.props.getUser();
+    console.log(this.props.userSystemData.data)
   }
   render() {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          {this.props.userSystemData.data.length > 0 ? (
-            // Screens for logged in users
+          {this.props.userSystemData.data.length == 0 ? (
+            <Stack.Group screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="SignIn" component={SignInComponent} />
+            <Stack.Screen name="SignUp" component={SignUpComponent} />
+          </Stack.Group>
+
+          ) : (
             <Stack.Group>
               <Stack.Screen name="Home" component={Main} />
-            </Stack.Group>
-          ) : (
-            // Auth screens
-            <Stack.Group screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="SignIn" component={SignInComponent} />
-              <Stack.Screen name="SignUp" component={SignUpComponent} />
             </Stack.Group>
           )}
         </Stack.Navigator>

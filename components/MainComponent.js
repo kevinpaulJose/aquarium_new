@@ -4,6 +4,7 @@ import {Input, Button, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {getUser,getCart, getWish, getProduct} from '../redux/ActionCreators';
 import { addCartData, removeCartData } from '../firebase/functions';
+import firebase from 'firebase'
 
 
 
@@ -52,7 +53,12 @@ class Main extends React.Component {
 
     }
     showLog() {
-        console.log(this.props.prodData)
+        // console.log(this.props.prodData)
+        firebase.auth().signOut().then(() => {
+                this.props.getUser();
+        }).catch((error) => {
+            console.error(error);
+        })
     }
     render() {
         return(
