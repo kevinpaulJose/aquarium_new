@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch) => ({
   getProduct: () => dispatch(getProduct()),
 });
 
-class SignInComponent extends React.Component {
+class ForgetPasswordComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -99,75 +99,8 @@ class SignInComponent extends React.Component {
             alignItems: "center",
           }}
         >
-          <TextInput
-            editable={!this.state.isLoading}
-            placeholder="**********"
-            secureTextEntry={this.state.hidePass}
-            autoCompleteType="password"
-            onChangeText={(e) => this.setState({ password: e })}
-            style={{
-              backgroundColor: theme.textBg,
-              height: 50,
-              textAlign: "center",
-              borderColor: theme.textOuter,
-              borderWidth: 1,
-              color: theme.darkTextColor,
-              width: ScreenWidth - 80,
-            }}
-          />
-          <View
-            style={{
-              position: "absolute",
-              width: 50,
-              height: 50,
-              // backgroundColor: "red",
-              right: 40,
-              justifyContent: "center",
-            }}
-          >
-            {this.state.hidePass ? (
-              <Icon
-                name="eye-off"
-                type="ionicon"
-                color={theme.lightTextColor}
-                size={20}
-                onPress={() =>
-                  this.setState({ hidePass: !this.state.hidePass })
-                }
-              />
-            ) : (
-              <Icon
-                name="eye"
-                type="ionicon"
-                color={theme.lightTextColor}
-                size={20}
-                onPress={() =>
-                  this.setState({ hidePass: !this.state.hidePass })
-                }
-              />
-            )}
-          </View>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("Reset")}
-            activeOpacity={1}
-            style={{
-              width: ScreenWidth - 80,
-              height: 30,
-              // backgroundColor: "red",
-            }}
-          >
-            <Text
-              style={{
-                // backgroundColor: "green",
-                textAlign: "right",
-                marginTop: 5,
-                fontSize: 14,
-                color: theme.primaryDark,
-              }}
-            >
-              Forget Password?
-            </Text>
-          </TouchableOpacity>
+
+
           <TouchableOpacity
             onPress={() => this.loginLogic()}
             disabled={this.state.isLoading}
@@ -193,94 +126,41 @@ class SignInComponent extends React.Component {
                   fontWeight: "bold",
                 }}
               >
-                LOGIN
+                GET RESET LINK
               </Text>
             )}
           </TouchableOpacity>
 
-          <View
-            style={{
-              width: ScreenWidth,
-              height: 1,
-              backgroundColor: theme.textOuter,
-              marginTop: 20,
-            }}
-          />
-          <View
-            style={{
-              width: ScreenWidth,
-              height: 40,
-              // backgroundColor: "orange",
-              flexDirection: "row",
-              marginTop: 10,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text
-              style={{
-                // backgroundColor: "green",
-                fontSize: 14,
-                color: theme.darkTextColor,
-              }}
-            >
-              Don't have an account!
-            </Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("SignUp")}
-              activeOpacity={1}
-            >
-              <Text
-                style={{
-                  // backgroundColor: "blue",
-                  fontSize: 14,
-                  color: theme.primaryDark,
-                  marginLeft: 2,
-                  fontWeight: "bold",
-                }}
-              >
-                Register
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     );
   };
 
 
-  showRegAlert = (title, message) =>
+  showLogAlert = (title, message) =>
     Alert.alert(
       title,
       message,
       [
         {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Register",
+          text: "Okay",
           style: "default",
-          onPress: () => this.props.navigation.navigate("SignUp"),
+          onPress: () => this.props.navigation.navigate("SignIn"),
         },
       ],
       {
         cancelable: true,
       }
     );
-    showForgetAlert = (title, message) =>
+    showRegAlert = (title, message) =>
     Alert.alert(
       title,
       message,
       [
         {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Forgot Password",
+          text: "Register",
           style: "default",
-          onPress: () => this.props.navigation.navigate("Reset"),
+          onPress: () => this.props.navigation.navigate("SignUp"),
         },
       ],
       {
@@ -307,28 +187,18 @@ class SignInComponent extends React.Component {
     this.setState({ isLoading: true });
     firebase
       .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then((user) => {
-        console.log(user);
-        this.props.getUser();
+      .sendPasswordResetEmail(this.state.email)
+      .then(() => {
+        console.log("Done");
+        this.showLogAlert("Done", "Please check your inbox for new password")
         this.setState({ isLoading: false });
       })
       .catch((error) => {
         console.log(error.message);
-        if (
-          error.message ==
-          "There is no user record corresponding to this identifier. The user may have been deleted."
-        ) {
-          this.showRegAlert("New User?", "Don't hesitate to Register with us!");
-        } else if (
-          error.message ==
-          "The password is invalid or the user does not have a password."
-        ) {
-          this.showForgetAlert("Incorrect Password", "");
-        } else if (error.message == "The email address is badly formatted.") {
+if (error.message == "The email address is badly formatted.") {
           this.showAlert("Invalid Email ID", "");
-        } else {
-          this.showAlert("Error", "Please try again");
+        }else if(error.message == "There is no user record corresponding to this identifier. The user may have been deleted.") {
+          this.showRegAlert("We could not find you", "Onboard with us!")
         }
         this.setState({ isLoading: false });
       });
@@ -347,8 +217,8 @@ class SignInComponent extends React.Component {
             backgroundColor: theme.mainBg,
           }}
         >
-          <TopComponent type="login" />
-          <LogTextComponent type="Login Now" />
+          <TopComponent type="forget" navigation={this.props.navigation} />
+          <LogTextComponent type="Reset Password" />
           <this._renderLoginComponent />
         </View>
 
@@ -358,4 +228,4 @@ class SignInComponent extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignInComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ForgetPasswordComponent);

@@ -9,6 +9,7 @@ import SignUpComponent from "./GuestComponent/SignUpComponent";
 import Main from "./MainComponent";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import ForgetPasswordComponent from "./GuestComponent/ForgetPasswordComponent";
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,7 @@ class Nav extends React.Component {
             <Stack.Group screenOptions={{ headerShown: false }}>
             <Stack.Screen name="SignIn" component={SignInComponent} />
             <Stack.Screen name="SignUp" component={SignUpComponent} />
+            <Stack.Screen name="Reset" component={ForgetPasswordComponent} />
           </Stack.Group>
 
           ) : (

@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Image } from "react-native";
+import { View, Image, TouchableOpacity } from "react-native";
+import { Icon } from "react-native-elements";
 import { theme } from "../Dimensions/defaults";
 import {
   NotchHeight,
@@ -7,8 +8,7 @@ import {
   ScreenWidth,
 } from "../Dimensions/dimensions";
 
-
-export default function TopComponent({ type }) {
+export default function TopComponent({ type, navigation }) {
   return (
     <View>
       {type === "login" ? (
@@ -59,12 +59,39 @@ export default function TopComponent({ type }) {
       <View
         style={{
           height: ScreenHeight / 2 / 2,
-          //   backgroundColor: "red",
+          // backgroundColor: "red",
           width: ScreenWidth,
           marginTop: 30,
           alignItems: "center",
         }}
       >
+        {type != "login" ? (
+          <TouchableOpacity
+            style={{
+              // backgroundColor: "green",
+              height: 50,
+              width: 50,
+              position: "absolute",
+              left: 0,
+              justifyContent: "center",
+              zIndex: 100,
+            }}
+            activeOpacity={1}
+            onPress={() => navigation.navigate("SignIn")}
+          >
+            <View>
+              <Icon
+                name="arrow-back-outline"
+                type="ionicon"
+                color={theme.lightTextColor}
+                size={28}
+              />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+
         <View
           style={{
             height: ScreenHeight / 2 / 2,
@@ -95,7 +122,6 @@ export default function TopComponent({ type }) {
           >
             <Image
               source={require("../../assets/coral1.jpg")}
-              
               style={{
                 width: (ScreenWidth - 150) / 2,
                 height: ScreenHeight / 2 / 2,

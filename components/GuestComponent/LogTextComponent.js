@@ -33,7 +33,7 @@ export default function LogTextComponent({ type }) {
             color: theme.darkTextColor,
           }}
         >
-          {type === "login" ? "Login Now" : "Register"}
+          {type}
         </Text>
       </View>
       <View style={{ marginTop: 2 }}>

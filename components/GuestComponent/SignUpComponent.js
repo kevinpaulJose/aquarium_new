@@ -315,10 +315,6 @@ class SignUpComponent extends React.Component {
     message,
     [
       {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
         text: "Login",
         style: "default",
         onPress: () => this.props.navigation.navigate("SignIn")
@@ -395,8 +391,8 @@ class SignUpComponent extends React.Component {
             backgroundColor: theme.mainBg,
           }}
         >
-          <TopComponent type="register" />
-          <LogTextComponent type="register" />
+          <TopComponent type="register" navigation={this.props.navigation} />
+          <LogTextComponent type="Register" />
           <this._renderLoginComponent />
         </View>
 
