@@ -340,10 +340,7 @@ class SignInComponent extends React.Component {
         <View
           style={{
             width: ScreenWidth,
-            height:
-              Platform.OS === "ios"
-                ? ScreenHeight + ScreenHeight / 2
-                : ScreenHeight + NotchHeight,
+            height:ScreenHeight + ScreenHeight / 2,
             backgroundColor: theme.mainBg,
           }}
         >
