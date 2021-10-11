@@ -10,6 +10,7 @@ import Main from "./MainComponent";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import ForgetPasswordComponent from "./GuestComponent/ForgetPasswordComponent";
+import HomeComponent from "./HomeComponents/HomeComponent";
 
 const Stack = createStackNavigator();
 
@@ -69,8 +70,8 @@ class Nav extends React.Component {
           </Stack.Group>
 
           ) : (
-            <Stack.Group>
-              <Stack.Screen name="Home" component={Main} />
+            <Stack.Group screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Home" component={HomeComponent} />
             </Stack.Group>
           )}
         </Stack.Navigator>

@@ -4,5 +4,7 @@ export const theme = {
     darkTextColor: "#434141",
     lightTextColor: "#9A9A9A",
     textOuter: "#DDDDDD",
-    textBg: "#F2F2F2"
+    textBg: "#F2F2F2",
+    badgeColor: "#FF8888",
+    fishBg: "#F2FDFF"
 }

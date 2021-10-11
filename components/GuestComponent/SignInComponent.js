@@ -311,6 +311,7 @@ class SignInComponent extends React.Component {
       .then((user) => {
         console.log(user);
         this.props.getUser();
+        this.props.getProduct();
         this.setState({ isLoading: false });
       })
       .catch((error) => {

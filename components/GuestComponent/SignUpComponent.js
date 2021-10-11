@@ -358,6 +358,7 @@ class SignUpComponent extends React.Component {
                     }
                     userCollection.doc().set(userToUpload).then(() => {
                         this.props.getUser();
+                        this.props.getProduct();
                         this.setState({isLoading: false})
                     }).catch((error) => {
                         this.showAlert("Error", "Please try again later")
