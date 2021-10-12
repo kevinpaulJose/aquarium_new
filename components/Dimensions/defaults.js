@@ -6,5 +6,9 @@ export const theme = {
     textOuter: "#DDDDDD",
     textBg: "#F2F2F2",
     badgeColor: "#FF8888",
-    fishBg: "#F2FDFF"
+    fishBg: "#F2FDFF",
+    tankColor: "#721B46",
+    tankBg: "#FFEFF7",
+    decorColor: "#202123",
+    decorBg: "rgba(32,33,35,0.03)"
 }

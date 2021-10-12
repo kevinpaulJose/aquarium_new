@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch) => ({
     getProduct: () => dispatch(getProduct()),
 });
 
-class FishCatComponent extends React.Component {
+class TankCatComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -58,7 +58,7 @@ class FishCatComponent extends React.Component {
                 <View style={{width: ScreenWidth - 40}}>
                     <View style={{width: ScreenWidth - 40, height: 30}}>
                         <View>
-                            <Text style={{fontSize: 18, color: theme.darkTextColor}}>Shop Fishes</Text>
+                            <Text style={{fontSize: 18, color: theme.darkTextColor}}>Shop Tanks</Text>
                         </View>
                         <TouchableOpacity
                             style={{position: "absolute", right: 0, bottom: 5}}>
@@ -67,13 +67,19 @@ class FishCatComponent extends React.Component {
                     </View>
                     <View style={{
                         width: ScreenWidth - 40,
-                        backgroundColor: "blue",
+                        // backgroundColor: "blue",
                         height: 190,
                         marginTop: 1,
                         borderRadius: 20
                     }}>
-                        <Image source={require('../../../assets/fish.png')}
-                               style={{width: ScreenWidth - 40, height: 190, resizeMode: "cover", borderRadius: 20}}/>
+                        <Image source={require('../../../assets/tank.gif')}
+                               style={{
+                                   width: ScreenWidth - 40,
+                                   height: 190,
+                                   resizeMode: "cover",
+                                   borderRadius: 20,
+                                   overlayColor: theme.mainBg
+                               }}/>
 
                     </View>
                     {
@@ -81,8 +87,8 @@ class FishCatComponent extends React.Component {
 
                             <View style={{marginTop: 20, flexDirection: "row", flexWrap: "wrap"}}>
                                 {this.props.prodData.data
-                                    .filter(product => (product.category === "fish") && (parseInt(product.stock) > 0))
-                                    .slice(0, 4)
+                                    .filter(product => (product.category === "tanks") && (parseInt(product.stock) > 0))
+                                    .slice(0, 2)
                                     .map((product, key) => (
                                     // <Text key={product.productId}>{product.name}</Text>
                                     <View style={{
@@ -90,7 +96,7 @@ class FishCatComponent extends React.Component {
                                         height: 230,
                                         borderRadius: 20,
                                         // backgroundColor: "blue",
-                                        backgroundColor: theme.fishBg,
+                                        backgroundColor: theme.tankBg,
                                         marginRight: key % 2 === 0 ? 10 : 0,
                                         marginTop: key >= 2 ? 10 : 0,
                                         borderWidth: 1,
@@ -153,7 +159,7 @@ class FishCatComponent extends React.Component {
                                                        PlaceholderContent={<View style={{
                                                            width: ((ScreenWidth - 80) / 2) - 20,
                                                            height: 100,
-                                                           backgroundColor: theme.fishBg
+                                                           backgroundColor: theme.tankBg
                                                        }}/>}
                                                 />
                                             </View>
@@ -175,7 +181,7 @@ class FishCatComponent extends React.Component {
                                                             // backgroundColor: "red",
                                                             // flex: 1,
                                                             textDecorationStyle: "solid",
-                                                            textDecorationLine :"line-through",
+                                                            textDecorationLine: "line-through",
                                                             marginRight: 5
                                                         }}>
                                                             {product.price}₹
@@ -194,7 +200,7 @@ class FishCatComponent extends React.Component {
                                                 </Text>
                                             </View>
                                             <TouchableOpacity style={{
-                                                backgroundColor: theme.primaryDark,
+                                                backgroundColor: theme.tankColor,
                                                 width: ((ScreenWidth - 80) / 2) - 20, height: 36, borderRadius: 10,
                                                 marginTop: 5,
                                                 justifyContent: "center",
@@ -229,4 +235,4 @@ class FishCatComponent extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FishCatComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(TankCatComponent);

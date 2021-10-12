@@ -59,7 +59,8 @@ class TopComponentHome extends React.Component {
                 // backgroundColor: "red",
                 justifyContent: "center",
                 flexDirection: "row",
-                paddingTop: 10
+                paddingTop: 10,
+                marginTop: Platform.OS === 'ios' ? 0 : NotchHeight
             }}>
                 <View style={{
                     width: 50,

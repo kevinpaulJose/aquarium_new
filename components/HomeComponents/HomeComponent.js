@@ -28,6 +28,8 @@ import {
 import {Alert} from "react-native";
 import TopComponentHome from "./HomeSharedComponents/TopComponent";
 import FishCatComponent from "./HomeSharedComponents/FishCatComponent";
+import TankCatComponent from "./HomeSharedComponents/TankCatComponent";
+import AccCatComponent from "./HomeSharedComponents/AccCatComponent";
 
 const mapStateToProps = (state) => {
     return {
@@ -52,14 +54,27 @@ class HomeComponent extends React.Component {
         this.state = {};
     }
 
+    _renderLine = () => (
+        <View style={{
+            width: ScreenWidth,
+            height: 1,
+            backgroundColor: theme.textOuter,
+            marginTop: 50,
+            marginBottom: 20
+        }}/>
+    )
 
 
     render() {
         return (
             <SafeAreaView style={{backgroundColor: theme.mainBg}}>
-                <ScrollView style={{marginTop: Platform.OS === 'ios' ? 0 : NotchHeight}}>
-                    <TopComponentHome/>
+                <TopComponentHome/>
+                <ScrollView>
                     <FishCatComponent/>
+                    <this._renderLine />
+                    <TankCatComponent/>
+                    <this._renderLine />
+                    <AccCatComponent/>
                 </ScrollView>
             </SafeAreaView>
 
