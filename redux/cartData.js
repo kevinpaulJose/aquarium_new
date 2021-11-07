@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 
 export const cartData = (state = {
-    isLoading: false,
+    isLoading: true,
     errMess: null,
     data: []
 }, action) => {
@@ -11,7 +11,7 @@ export const cartData = (state = {
         case ActionTypes.CRT_GET_SUCCESS:
             return {...state, isLoading: false, errMess: null, data: action.payload};
         case ActionTypes.CRT_GET_ERR:
-            return {...state, isLoading: false, errMess: action.payload, data: []};
+            return {...state, isLoading: true, errMess: action.payload, data: []};
         default:
             return state;
     }

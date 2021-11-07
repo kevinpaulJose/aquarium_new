@@ -147,16 +147,22 @@ export const getUser = () => (dispatch) => {
 
   export const getCart = (uid) => (dispatch) => {
     dispatch(getCartLoading());
-
-    cartCollection.where("userid", "==", uid).get().then((querySnapshot) => {
-      let temp = [];
-      querySnapshot.forEach((doc)=> {
-        temp.push(doc.data());
+    if(uid == null) {
+      dispatch(getCartSuccess([]));
+    }else {
+      cartCollection.where("userid", "==", uid).get().then((querySnapshot) => {
+        let temp = [];
+        querySnapshot.forEach((doc)=> {
+          temp.push(doc.data());
+          console.log(doc.data())
+        })
+        dispatch(getCartSuccess(temp));
+      }).catch((error) => {
+        dispatch(getCartError(error))
       })
-      dispatch(getCartSuccess(temp));
-    }).catch((error) => {
-      dispatch(getCartError(error))
-    })
+    }
+
+
 
   };
   export const getCartLoading = () => ({

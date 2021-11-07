@@ -4,19 +4,41 @@ const cartCollection = firebase.firestore().collection("cart");
 const wishCollection = firebase.firestore().collection("wish");
 
 export const addCartData = async (cartData) => {
-        cartCollection.doc().set(cartData).then(() => {
-            let retObj = {
-                status: "success",
-                err: false
+    cartCollection.where("productid", "==", cartData.productid)
+        .get().then((querySnapshot) => {
+            let docID = "";
+            let count = 0;
+
+                querySnapshot.forEach((doc) => {
+                    docID = doc.id;
+                    count = doc.data().count;
+                })
+        if(count > 0) {
+                cartCollection.doc(docID).set({count: count + 1}, {merge: true})
             }
-            return retObj;
-        }).catch((error) => {
-            let retObj = {
-                status: "failed",
-                err: error
+            else {
+                cartCollection.doc().set(cartData).then(() => {
+                    let retObj = {
+                        status: "success",
+                        err: false
+                    }
+                    console.log("Done")
+                    return retObj;
+                }).catch((error) => {
+                    let retObj = {
+                        status: "failed",
+                        err: error
+                    }
+                    console.log("error")
+                    return retObj;
+                })
             }
-            return retObj;
-        })
+
+    })
+
+}
+export const getTimeEpoch = () => {
+    return new Date().getTime().toString();
 }
 
 export const addWishData = async (wishData) => {

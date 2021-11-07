@@ -25,6 +25,7 @@ import {
     getProduct,
 } from "../../../redux/ActionCreators";
 import {Alert} from "react-native";
+import {getTimeEpoch} from "../../../firebase/functions";
 
 const mapStateToProps = (state) => {
     return {
@@ -61,11 +62,14 @@ class TankCatComponent extends React.Component {
                             <Text style={{fontSize: 18, color: theme.darkTextColor}}>Shop Tanks</Text>
                         </View>
                         <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate("Specific", {item: "tanks"})}
                             style={{position: "absolute", right: 0, bottom: 5}}>
                             <Text style={{fontSize: 14, color: theme.darkTextColor}}>See all >></Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={{
+                    <TouchableOpacity activeOpacity={1}
+                                      onPress={() => this.props.navigation.navigate("Specific", {item: "tanks"})}
+                                      style={{
                         width: ScreenWidth - 40,
                         // backgroundColor: "blue",
                         height: 190,
@@ -81,7 +85,7 @@ class TankCatComponent extends React.Component {
                                    overlayColor: theme.mainBg
                                }}/>
 
-                    </View>
+                    </TouchableOpacity>
                     {
                         this.props.prodData.isLoading ? <View><ActivityIndicator/></View> :
 
@@ -199,7 +203,53 @@ class TankCatComponent extends React.Component {
                                                     {product.netPrice}₹
                                                 </Text>
                                             </View>
-                                            <TouchableOpacity style={{
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    this.setState({loading: true})
+                                                    const cartCollection = firebase.firestore().collection("cart");
+                                                    console.log("Clicked")
+                                                    let cartData = {
+                                                        cartid: getTimeEpoch(),
+                                                        userid: this.props.userSystemData.data[0].userid,
+                                                        productid: product.productId,
+                                                        count: 1
+                                                    }
+                                                    cartCollection.where("productid", "==", cartData.productid)
+                                                        .get().then((querySnapshot) => {
+                                                        let docID = "";
+                                                        let count = 0;
+
+                                                        querySnapshot.forEach((doc) => {
+                                                            docID = doc.id;
+                                                            count = doc.data().count;
+                                                        })
+                                                        if (count > 0) {
+                                                            cartCollection.doc(docID).set({count: count + 1}, {merge: true})
+                                                                .then(() => {
+                                                                    this.props.getCart(this.props.userSystemData.data[0].userid);
+                                                                    this.setState({loading: false})
+                                                                    this.props.navigation.navigate("Cart");
+                                                                }).catch((error) => {
+                                                                this.setState({loading: false});
+                                                                console.error(error)
+                                                            })
+
+                                                        } else {
+                                                            cartCollection.doc().set(cartData).then(() => {
+                                                                this.props.getCart(this.props.userSystemData.data[0].userid)
+                                                                this.setState({loading: false})
+                                                                this.props.navigation.navigate("Cart");
+                                                            }).catch((error) => {
+                                                                alert("Error")
+                                                                this.setState({loading: false})
+                                                                console.error(error)
+                                                            })
+                                                        }
+
+                                                    })
+
+                                                }}
+                                                style={{
                                                 backgroundColor: theme.tankColor,
                                                 width: ((ScreenWidth - 80) / 2) - 20, height: 36, borderRadius: 10,
                                                 marginTop: 5,

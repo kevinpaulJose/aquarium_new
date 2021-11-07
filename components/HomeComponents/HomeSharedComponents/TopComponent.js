@@ -50,86 +50,144 @@ class TopComponentHome extends React.Component {
         this.state = {};
     }
 
+    componentDidMount() {
+        getCart(this.props.userSystemData.data.userid);
+        // console.log(this.props.cartData);
+        // console.log(this.props.userSystemData)
+    }
+
 
     render() {
         return (
-            <View style={{
-                width: ScreenWidth,
-                height: 70,
-                // backgroundColor: "red",
-                justifyContent: "center",
-                flexDirection: "row",
-                paddingTop: 10,
-                marginTop: Platform.OS === 'ios' ? 0 : NotchHeight
+            <SafeAreaView style={{
+                backgroundColor: theme.mainBg
+                // backgroundColor: "red"
             }}>
                 <View style={{
-                    width: 50,
-                    height: 50,
-                    backgroundColor: theme.textBg,
+                    width: ScreenWidth,
+                    height: 70,
+                    backgroundColor: theme.mainBg,
                     justifyContent: "center",
-                    borderRadius: 20,
-                    borderColor: theme.textOuter,
-                    borderWidth: 1
-                }}>
-                    <Icon
-                        name="person-outline"
-                        type="ionicon"
-                        color={theme.darkTextColor}
-                        size={26}
-                        onPress={() => {
-                            firebase.auth().signOut().then(() => {
-                                this.props.getUser();
-                            }).catch((error) => {
-                                console.error(error);
-                            })
-                        }}
-
-                    />
-                </View>
-                <View style={{
                     flexDirection: "row",
-                    width: (ScreenWidth / 2) + 60,
-                    height: 50,
-                    // backgroundColor: "orange",
-                    justifyContent: "center",
-                    alignItems: "center"
+                    paddingTop: 10,
+                    marginTop: Platform.OS === 'ios' ? 0 : NotchHeight,
+                    alignSelf: "center",
                 }}>
-                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>JIM</Text>
-                    <Text style={{
-                        marginLeft: 5,
-                        fontSize: 18,
-                        color: theme.primaryDark,
-                        fontWeight: "bold"
-                    }}>Aquarium</Text>
-                </View>
-                <View style={{width: 50, height: 50}}>
-                    <View style={{
-                        width: 50,
-                        height: 50,
-                        backgroundColor: theme.textBg,
-                        justifyContent: "center",
-                        borderRadius: 20,
-                        borderColor: theme.textOuter,
-                        borderWidth: 1
-                    }}>
-                        <Icon
-                            name="cart-outline"
-                            type="ionicon"
-                            color={theme.darkTextColor}
-                            size={26}
+                    {!this.props.back ?
+                        <View style={{
+                            width: 50,
+                            height: 50,
+                            backgroundColor: theme.textBg,
+                            justifyContent: "center",
+                            borderRadius: 20,
+                            borderColor: theme.textOuter,
+                            borderWidth: 1
+                        }}>
+                            <Icon
+                                name="log-out-outline"
+                                type="ionicon"
+                                color={theme.darkTextColor}
+                                size={26}
+                                onPress={() => {
+                                    Alert.alert(
+                                        "Log Out",
+                                        "Are you sure you need to Log out?",
+                                        [
+                                            {
+                                                text: "Log out",
+                                                onPress: () => {
+                                                    firebase.auth().signOut().then(() => {
+                                                        this.props.getUser();
+                                                    }).catch((error) => {
+                                                        console.error(error);
+                                                    })
+                                                },
+                                                style: "destructive"
+                                            },
+                                            {
+                                                text: "Nah, Stay in Water",
+                                                onPress: () => console.log("Cancel Pressed"),
+                                                style: "cancel"
+                                            }
+                                        ]
+                                    );
 
-                        />
-                        <Badge value={2} containerStyle={{position: "absolute", top: -5, right: -5}}
-                               badgeStyle={{
-                                   backgroundColor: theme.badgeColor,
-                                   width: 20,
-                                   height: 20,
-                                   borderRadius: 100
-                               }}
-                        />
+                                }}
+
+                            />
+                        </View>
+                        :
+                        <View style={{
+                            width: 50,
+                            height: 50,
+                            backgroundColor: theme.textBg,
+                            justifyContent: "center",
+                            borderRadius: 20,
+                            borderColor: theme.textOuter,
+                            borderWidth: 1
+                        }}>
+                            <Icon
+                                name="chevron-back-outline"
+                                type="ionicon"
+                                color={theme.darkTextColor}
+                                size={26}
+                                onPress={() => {
+                                    this.props.navigation.pop()
+                                }
+                                }
+
+                            />
+                        </View>
+                    }
+                    <View style={{
+                        flexDirection: "row",
+                        width: (ScreenWidth / 2) + 60,
+                        height: 50,
+                        // backgroundColor: "orange",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>JIM</Text>
+                        <Text style={{
+                            marginLeft: 5,
+                            fontSize: 18,
+                            color: theme.primaryDark,
+                            fontWeight: "bold"
+                        }}>Aquarium</Text>
+                    </View>
+                    <View style={{width: 50, height: 50}}>
+                        <View style={{
+                            width: 50,
+                            height: 50,
+                            backgroundColor: theme.textBg,
+                            justifyContent: "center",
+                            borderRadius: 20,
+                            borderColor: theme.textOuter,
+                            borderWidth: 1
+                        }}>
+                            <Icon
+                                name="cart-outline"
+                                type="ionicon"
+                                color={theme.darkTextColor}
+                                size={26}
+                                onPress={() => this.props.navigation.navigate("Cart")}
+
+                            />
+                            {this.props.cartData.data.length > 0 &&
+                            <Badge value={this.props.cartData.data.length} containerStyle={{position: "absolute", top: -5, right: -5}}
+                                   badgeStyle={{
+                                       backgroundColor: theme.badgeColor,
+                                       width: 20,
+                                       height: 20,
+                                       borderRadius: 100
+                                   }}
+                            />
+                            }
+
+                        </View>
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
 
         );
     }

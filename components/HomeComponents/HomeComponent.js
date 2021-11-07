@@ -30,6 +30,8 @@ import TopComponentHome from "./HomeSharedComponents/TopComponent";
 import FishCatComponent from "./HomeSharedComponents/FishCatComponent";
 import TankCatComponent from "./HomeSharedComponents/TankCatComponent";
 import AccCatComponent from "./HomeSharedComponents/AccCatComponent";
+import FoodCatComponent from "./HomeSharedComponents/FoodCatComponent";
+import SocialComponent from "./HomeSharedComponents/SocialComponent";
 
 const mapStateToProps = (state) => {
     return {
@@ -53,6 +55,9 @@ class HomeComponent extends React.Component {
         super(props);
         this.state = {};
     }
+    componentDidMount() {
+        this.props.getCart(this.props.userSystemData.data[0].userid);
+    }
 
     _renderLine = () => (
         <View style={{
@@ -67,16 +72,19 @@ class HomeComponent extends React.Component {
 
     render() {
         return (
-            <SafeAreaView style={{backgroundColor: theme.mainBg}}>
-                <TopComponentHome/>
-                <ScrollView>
-                    <FishCatComponent/>
-                    <this._renderLine />
-                    <TankCatComponent/>
-                    <this._renderLine />
-                    <AccCatComponent/>
-                </ScrollView>
-            </SafeAreaView>
+
+            <ScrollView>
+                <FishCatComponent navigation={this.props.navigation}/>
+                <this._renderLine/>
+                <TankCatComponent navigation={this.props.navigation}/>
+                <this._renderLine/>
+                <FoodCatComponent navigation={this.props.navigation}/>
+                <this._renderLine/>
+                <AccCatComponent navigation={this.props.navigation}/>
+                <this._renderLine/>
+                <SocialComponent/>
+            </ScrollView>
+
 
         );
     }
