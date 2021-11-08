@@ -34,6 +34,7 @@ const mapStateToProps = (state) => {
         cartData: state.cartData,
         wishData: state.wishData,
         prodData: state.prodData,
+        addressData: state.addressData
     };
 };
 
@@ -75,6 +76,32 @@ class CartComponent extends React.Component {
                 {this.props.cartData.data.length > 0 && !this.props.cartData.isLoading ?
                     <View style={{marginTop: 30, alignItems: "center"}}>
                         <TouchableOpacity
+                            onPress={() => {
+                                console.log(this.props.addressData)
+                                if(this.props.addressData.data.length === 0) {
+                                    this.props.navigation.navigate("AddAddress", {item: {
+                                            name: this.props.userSystemData.data[0].username,
+                                            phoneno: "",
+                                            pincode: "",
+                                            address: "",
+                                            district: "",
+                                            state: "",
+                                            available: false
+                                        }})
+                                }else {
+                                    this.props.navigation.navigate("AddAddress", {item: {
+                                        name: this.props.addressData.data[0].name,
+                                            phoneno: this.props.addressData.data[0].phoneno,
+                                            pincode: this.props.addressData.data[0].pincode,
+                                            address: this.props.addressData.data[0].address,
+                                            district: this.props.addressData.data[0].district,
+                                            state: this.props.addressData.data[0].state,
+                                            available: true
+                                        }})
+                                }
+
+                                }
+                            }
                             activeOpacity={0.8}
                             style={{
                                 backgroundColor: theme.decorColor,

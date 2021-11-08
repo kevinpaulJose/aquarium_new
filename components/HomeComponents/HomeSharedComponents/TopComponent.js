@@ -88,31 +88,31 @@ class TopComponentHome extends React.Component {
                                 type="ionicon"
                                 color={theme.darkTextColor}
                                 size={26}
-                                onPress={() => {
-                                    Alert.alert(
-                                        "Log Out",
-                                        "Are you sure you need to Log out?",
-                                        [
-                                            {
-                                                text: "Log out",
-                                                onPress: () => {
-                                                    firebase.auth().signOut().then(() => {
-                                                        this.props.getUser();
-                                                    }).catch((error) => {
-                                                        console.error(error);
-                                                    })
-                                                },
-                                                style: "destructive"
-                                            },
-                                            {
-                                                text: "Nah, Stay in Water",
-                                                onPress: () => console.log("Cancel Pressed"),
-                                                style: "cancel"
-                                            }
-                                        ]
-                                    );
-
-                                }}
+                                // onPress={() => {
+                                //     Alert.alert(
+                                //         "Log Out",
+                                //         "Are you sure you need to Log out?",
+                                //         [
+                                //             {
+                                //                 text: "Log out",
+                                //                 onPress: () => {
+                                //                     firebase.auth().signOut().then(() => {
+                                //                         this.props.getUser();
+                                //                     }).catch((error) => {
+                                //                         console.error(error);
+                                //                     })
+                                //                 },
+                                //                 style: "destructive"
+                                //             },
+                                //             {
+                                //                 text: "Nah, Stay in Water",
+                                //                 onPress: () => console.log("Cancel Pressed"),
+                                //                 style: "cancel"
+                                //             }
+                                //         ]
+                                //     );
+                                //
+                                // }}
 
                             />
                         </View>

@@ -15,6 +15,7 @@ import SpecificCatComponent from "./HomeComponents/SpecificCatComponent";
 import TopComponentHome from "./HomeComponents/HomeSharedComponents/TopComponent";
 import {theme} from "./Dimensions/defaults";
 import CartComponent from "./CartComponents/CartComponent";
+import AddAddressComponent from "./AddressComponents/AddAddressComponent";
 
 const Stack = createStackNavigator();
 
@@ -105,6 +106,16 @@ class Nav extends React.Component {
                                 })
                                 }
                                 name="Cart" component={CartComponent}/>
+                            <Stack.Screen
+                                options={({route, navigation}) => ({
+                                    headerTitle: (props) => <TopComponentHome back navigation={navigation}/>,
+                                    headerStyle: {
+                                        backgroundColor: theme.mainBg
+                                    },
+                                    headerLeft: () => null,
+                                })
+                                }
+                                name="AddAddress" component={AddAddressComponent}/>
                         </Stack.Group>
                     )}
                 </Stack.Navigator>

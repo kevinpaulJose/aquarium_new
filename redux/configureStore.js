@@ -5,6 +5,7 @@ import {userSystemData} from './userSystemData'
 import { cartData } from './cartData';
 import { wishData } from './wishData';
 import { prodData } from './prodData';
+import {addressData} from './addressData';
 
 import { persistStore, persistCombineReducers } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
@@ -17,7 +18,7 @@ export const ConfigureStore = () => {
     }
     const store = createStore(
         persistCombineReducers(config, {
-            userSystemData, cartData, wishData, prodData
+            userSystemData, cartData, wishData, prodData, addressData
         }),
         applyMiddleware(thunk, logger)
     );

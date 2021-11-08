@@ -8,50 +8,7 @@ const userCollection = firebase.firestore().collection("users");
 const cartCollection = firebase.firestore().collection("cart");
 const wishCollection = firebase.firestore().collection("wish");
 const productCollection = firebase.firestore().collection("products");
-
-// export const createUser = (email, password, username) => (dispatch) => {
-//   dispatch(createUserLoading());
-//   firebase.auth().createUserWithEmailAndPassword(email, password)
-//     .then((userCredential) => {
-//       // Signed in
-//       const user = userCredential.user;
-//       let userToUpload = {
-//         userid: user.uid,
-//         email: user.email,
-//         username: username
-//       }
-//       userCollection.doc().set(userToUpload).then(() => {
-//         dispatch(createUserSuccess(userToUpload));
-//       }).catch((error) => {
-//         dispatch(createUserError(error));
-//       })
-//     })
-//     .catch((error) => {
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//       dispatch(createUserError(error));
-//       // ..
-//     });
-// };
-// export const createUserLoading = () => ({
-//   type: ActionTypes.USR_CREATE_LOAD,
-//   payload: true,
-// });
-// export const createUserSuccess = (user) => ({
-//   type: ActionTypes.USR_CREATE_SUCCESS,
-//   payload: user,
-// });
-// export const createUserError = (err) => ({
-//   type: ActionTypes.USR_CREATE_ERR,
-//   payload: err,
-// });
-
-
-
-
-
-
-
+const addressCollection = firebase.firestore().collection("address");
 
 
 
@@ -94,56 +51,6 @@ export const getUser = () => (dispatch) => {
 
 
 
-// export const signinUser = (email, password) => (dispatch) => {
-//   dispatch(createUserLoading());
-
-//   firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
-//     userCollection.where("userid", "==", user.user.uid).get().then((querySnapshot) => {
-//       querySnapshot.forEach((doc) => {
-//         dispatch(createUserSuccess(doc.data()));
-//       })
-//     }).catch((error) => {
-//       dispatch(createUserError(error));
-//     })
-//   }).catch((error) => {
-//     dispatch(createUserError(error));
-//   })
-// }
-
-
-
-
-
-
-
-//   export const signoutUser = () => (dispatch) => {
-//     dispatch(outUserLoading());
-
-//     firebase.auth().signOut().then(() => {
-//     dispatch(outUserSuccess());
-// }).catch((error) => {
-//     dispatch(outUserError(error));
-// });
-
-  // };
-  // export const outUserLoading = () => ({
-  //   type: ActionTypes.USR_OUT_LOAD,
-  //   payload: true,
-  // });
-  // export const outUserSuccess = () => ({
-  //   type: ActionTypes.USR_OUT_SUCCESS,
-  //   payload: true,
-  // });
-  // export const outUserError = (err) => ({
-  //   type: ActionTypes.USR_OUT_ERR,
-  //   payload: err,
-  // });
-
-
-
-
-
-
 
   export const getCart = (uid) => (dispatch) => {
     dispatch(getCartLoading());
@@ -177,6 +84,40 @@ export const getUser = () => (dispatch) => {
     type: ActionTypes.CRT_GET_ERR,
     payload: err,
   });
+
+
+export const getAddress = (uid) => (dispatch) => {
+  dispatch(getAddressLoading());
+  if(uid == null) {
+    dispatch(getAddressSuccess([]));
+  }else {
+    addressCollection.where("userid", "==", uid).get().then((querySnapshot) => {
+      let temp = [];
+      querySnapshot.forEach((doc)=> {
+        temp.push(doc.data());
+        console.log(doc.data())
+      })
+      dispatch(getAddressSuccess(temp));
+    }).catch((error) => {
+      dispatch(getAddressError(error))
+    })
+  }
+
+
+
+};
+export const getAddressLoading = () => ({
+  type: ActionTypes.ADD_GET_LOAD,
+  payload: true,
+});
+export const getAddressSuccess = (cartData) => ({
+  type: ActionTypes.ADD_GET_SUCCESS,
+  payload: cartData,
+});
+export const getAddressError = (err) => ({
+  type: ActionTypes.ADD_GET_ERR,
+  payload: err,
+});
 
 
   export const getWish = (uid) => (dispatch) => {

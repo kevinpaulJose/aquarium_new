@@ -4,7 +4,7 @@ import {
     TextInput,
     TouchableOpacity,
     Platform,
-    Easing,
+    Easing, Modal,
 } from "react-native";
 import {SafeAreaView, ScrollView, View, Animated} from "react-native";
 import {Badge, Button, Overlay, Text, Image} from "react-native-elements";
@@ -47,7 +47,8 @@ class TankCatComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            products: []
+            products: [],
+            loading: false
         };
     }
 
@@ -67,6 +68,29 @@ class TankCatComponent extends React.Component {
                             <Text style={{fontSize: 14, color: theme.darkTextColor}}>See all >></Text>
                         </TouchableOpacity>
                     </View>
+                    <Modal
+                        animationType="fade"
+                        transparent={false}
+                        visible={this.state.loading}
+                        statusBarTranslucent={true}
+
+                    >
+                        <View style={{
+                            width: ScreenWidth,
+                            height: ScreenHeight,
+                            backgroundColor: "#444444",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                            <Image source={require("../../../assets/cartadd.gif")}
+                                   style={{
+                                       width: ScreenWidth / 2,
+                                       height: ScreenWidth / 2
+                                   }}/>
+                        </View>
+
+
+                    </Modal>
                     <TouchableOpacity activeOpacity={1}
                                       onPress={() => this.props.navigation.navigate("Specific", {item: "tanks"})}
                                       style={{
