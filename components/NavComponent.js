@@ -16,6 +16,7 @@ import TopComponentHome from "./HomeComponents/HomeSharedComponents/TopComponent
 import {theme} from "./Dimensions/defaults";
 import CartComponent from "./CartComponents/CartComponent";
 import AddAddressComponent from "./AddressComponents/AddAddressComponent";
+import ProfileComponent from "./ProfileComponents/ProfileComponent";
 
 const Stack = createStackNavigator();
 
@@ -116,6 +117,16 @@ class Nav extends React.Component {
                                 })
                                 }
                                 name="AddAddress" component={AddAddressComponent}/>
+                            <Stack.Screen
+                                options={({route, navigation}) => ({
+                                    headerTitle: (props) => <TopComponentHome back navigation={navigation}/>,
+                                    headerStyle: {
+                                        backgroundColor: theme.mainBg
+                                    },
+                                    headerLeft: () => null,
+                                })
+                                }
+                                name="Profile" component={ProfileComponent}/>
                         </Stack.Group>
                     )}
                 </Stack.Navigator>

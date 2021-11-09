@@ -9,6 +9,7 @@ const cartCollection = firebase.firestore().collection("cart");
 const wishCollection = firebase.firestore().collection("wish");
 const productCollection = firebase.firestore().collection("products");
 const addressCollection = firebase.firestore().collection("address");
+const ordersCollection = firebase.firestore().collection("orders");
 
 
 
@@ -116,6 +117,43 @@ export const getAddressSuccess = (cartData) => ({
 });
 export const getAddressError = (err) => ({
   type: ActionTypes.ADD_GET_ERR,
+  payload: err,
+});
+
+
+export const getOrders = (uid) => (dispatch) => {
+  dispatch(getOrdersLoading());
+  if(uid == null) {
+    dispatch(getOrdersSuccess([]));
+  }else {
+    ordersCollection.where("userid", "==", uid)
+        .orderBy("timestamp", "desc")
+        .get().then((querySnapshot) => {
+      let temp = [];
+      querySnapshot.forEach((doc)=> {
+        temp.push(doc.data());
+        console.log(doc.data())
+      })
+      dispatch(getOrdersSuccess(temp));
+    }).catch((error) => {
+      dispatch(getOrdersError(error))
+      console.error(error)
+    })
+  }
+
+
+
+};
+export const getOrdersLoading = () => ({
+  type: ActionTypes.ORD_GET_LOAD,
+  payload: true,
+});
+export const getOrdersSuccess = (cartData) => ({
+  type: ActionTypes.ORD_GET_SUCCESS,
+  payload: cartData,
+});
+export const getOrdersError = (err) => ({
+  type: ActionTypes.ORD_GET_ERR,
   payload: err,
 });
 

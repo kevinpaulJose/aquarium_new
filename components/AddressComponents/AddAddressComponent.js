@@ -23,10 +23,11 @@ import {
     getUser,
     getCart,
     getWish,
-    getProduct, getAddress,
+    getProduct, getAddress, getOrders,
 } from "../../redux/ActionCreators";
 import {getTimeEpoch} from "../../firebase/functions";
 import axios from "axios";
+import emailjs from "emailjs-com";
 
 const mapStateToProps = (state) => {
     return {
@@ -34,7 +35,8 @@ const mapStateToProps = (state) => {
         cartData: state.cartData,
         wishData: state.wishData,
         prodData: state.prodData,
-        addressData: state.addressData
+        addressData: state.addressData,
+        orderData: state.orderData
     };
 };
 
@@ -43,7 +45,8 @@ const mapDispatchToProps = (dispatch) => ({
     getCart: (uid) => dispatch(getCart(uid)),
     getWish: (uid) => dispatch(getWish(uid)),
     getProduct: () => dispatch(getProduct()),
-    getAddress: (uid) => dispatch(getAddress(uid))
+    getAddress: (uid) => dispatch(getAddress(uid)),
+    getOrders: (uid) => dispatch(getOrders(uid))
 });
 
 
@@ -59,11 +62,16 @@ class AddAddressComponent extends React.Component {
             state: this.props.route.params.item.state,
             locationError: false,
             available: this.props.route.params.item.available,
-            loading: false
+            loading: false,
+            checkingDelivery: true
         };
+    }
+    componentDidMount() {
+        this.checkDelivery();
     }
 
     checkDelivery = () => {
+        this.setState({checkingDelivery: true})
         setTimeout(() => {
             let options = {
                 method: "POST",
@@ -77,6 +85,7 @@ class AddAddressComponent extends React.Component {
                 data: {searchBy: "pincode", value: this.state.pincode},
             };
             axios.request(options).then((response) => {
+                this.setState({checkingDelivery: false})
                 if (response.data.length > 0) {
                     if (response.data[0].district === "Tirunelveli") {
                         this.setState({
@@ -99,7 +108,7 @@ class AddAddressComponent extends React.Component {
                     console.log("No Service");
                 }
             }).catch((error) => {
-                this.setState({locationError: true});
+                this.setState({locationError: true, checkingDelivery: false});
                 console.log("No Service");
             })
             ;
@@ -142,10 +151,12 @@ class AddAddressComponent extends React.Component {
                                 number: val.count,
                                 price: temp[0].price,
                                 quantity: temp[0].quantity,
-                                stock: temp[0].stock
+                                stock: temp[0].stock,
+                                name: temp[0].name
                             }
                             cartProducts.push(prodObj)
                         })
+                        let orderId = getTimeEpoch();
                         let setOrderData = {
                             address: {
                                 addressId: addressId,
@@ -157,7 +168,8 @@ class AddAddressComponent extends React.Component {
                                 phoneno: this.state.phoneno,
                                 pincode: this.state.pincode,
                                 state: this.state.state,
-                                userid: this.props.userSystemData.data[0].userid
+                                userid: this.props.userSystemData.data[0].userid,
+                                servicable: !this.state.locationError
                             },
                             addressOg: {
                                 addressId: "",
@@ -173,12 +185,17 @@ class AddAddressComponent extends React.Component {
                             },
                             products: cartProducts,
                             status: "Order Placed",
-                            timestamp: getTimeEpoch(),
-                            userid: this.props.userSystemData.data[0].userid
+                            timestamp: firebase.firestore.Timestamp.now(),
+                            userid: this.props.userSystemData.data[0].userid,
+                            id: orderId
 
                         }
                         firebase.firestore().collection("orders").doc().set(setOrderData)
                             .then(() => {
+                                if(!this.state.locationError) {
+                                    this.sendEmails({orderId: orderId})
+                                }
+                                this.props.getOrders(this.props.userSystemData.data[0].userid);
                                 this.props.cartData.data.forEach((item) => {
                                     firebase.firestore().collection("cart")
                                         .where("cartid", "==", item.cartid)
@@ -195,14 +212,15 @@ class AddAddressComponent extends React.Component {
                                     })
                                 })
                                 this.setState({loading: false});
-                                alert("Success")
+                                // alert("Success")
+                                this.props.navigation.navigate("Profile")
                             }).catch((error) => {
                             console.log(error);
                             alert("Error Placing the order")
                             this.setState({loading: false});
                         })
                     }).catch((error) => {
-                        console.error(error)
+                    console.error(error)
                     alert("Processing Error")
                     this.setState({loading: false});
                 })
@@ -239,11 +257,13 @@ class AddAddressComponent extends React.Component {
                             number: val.count,
                             price: temp[0].price,
                             quantity: temp[0].quantity,
-                            stock: temp[0].stock
+                            stock: temp[0].stock,
+                            name: temp[0].name
                         }
                         cartProducts.push(prodObj)
                     })
                     // console.log(this.props.prodData.data[0])
+                    let orderId = getTimeEpoch();
                     let setOrderData = {
                         address: {
                             addressId: addressId,
@@ -256,7 +276,8 @@ class AddAddressComponent extends React.Component {
                             pincode: this.state.pincode,
                             state: this.state.state,
                             userid: this.props.userSystemData.data[0].userid,
-                            orderId: getTimeEpoch()
+                            orderId: getTimeEpoch(),
+                            servicable: !this.state.locationError
                         },
                         addressOg: {
                             addressId: "",
@@ -272,20 +293,26 @@ class AddAddressComponent extends React.Component {
                         },
                         products: cartProducts,
                         status: "Order Placed",
-                        timestamp: getTimeEpoch(),
-                        userid: this.props.userSystemData.data[0].userid
+                        timestamp: firebase.firestore.Timestamp.now(),
+                        userid: this.props.userSystemData.data[0].userid,
+                        id: orderId
 
                     }
                     firebase.firestore().collection("orders").doc().set(setOrderData)
                         .then(() => {
+                            if(!this.state.locationError) {
+                                this.sendEmails({orderId: orderId})
+                            }
+
+                            this.props.getOrders(this.props.userSystemData.data[0].userid);
                             this.props.cartData.data.forEach((item) => {
                                 firebase.firestore().collection("cart")
                                     .where("cartid", "==", item.cartid)
                                     .get().then((querySnapshot) => {
-                                        let docId = "";
-                                        querySnapshot.forEach((doc) => {
-                                            docId = doc.id
-                                        })
+                                    let docId = "";
+                                    querySnapshot.forEach((doc) => {
+                                        docId = doc.id
+                                    })
                                     firebase.firestore().collection("cart").doc(docId).delete()
                                         .then(() => {
                                             console.log("Deleted")
@@ -294,7 +321,8 @@ class AddAddressComponent extends React.Component {
                                 })
                             })
                             this.setState({loading: false});
-                            alert("Success")
+                            // alert("Success")
+                            this.props.navigation.navigate("Profile")
                         }).catch((error) => {
                         console.log(error);
                         alert("Error Placing the order")
@@ -307,6 +335,83 @@ class AddAddressComponent extends React.Component {
             })
         }
 
+    }
+    sendEmails = ({orderId}) => {
+        console.log("Called")
+        let address = this.state.name +
+            "\n" +
+            this.state.address + "," +
+            "\n" +
+            this.state.district + " - " + this.state.pincode +
+            "\n" +
+            this.state.state;
+        let products = "";
+        let count = 1;
+        this.props.cartData.data.forEach((val) => {
+            let temp = this.props.prodData.data.filter(i => i.productId === val.productid);
+            let prodObj = {
+                netPrice: temp[0].netPrice,
+                number: val.count,
+                quantity: temp[0].quantity,
+                total: (parseInt(temp[0].netPrice) * val.count),
+                name: temp[0].name
+            }
+            let prodTemp =  count++ + ". " + prodObj.name + " " + "₹" + prodObj.netPrice + " x " + prodObj.number + " -- " + "₹" + prodObj.total;
+            // console.log(prodTemp)
+            products += (prodTemp + "   |   ");
+        });
+        // console.log(products);
+        let templateSelfParam = {
+            service_id: "Jim_aquarium",
+            template_id: "Jim_self",
+            user_id: "user_Fshle7lhIGd5UAZiXexYL",
+            id: orderId,
+            to_email: "jimaquarium@gmail.com",
+            accessToken: "7717287bb3920229e72ce310ae21e85c",
+            address: address,
+            phone: this.state.phoneno,
+            products: products
+        };
+        let templateClientParam = {
+            service_id: "Jim_aquarium",
+            template_id: "Jim_customer",
+            user_id: "user_Fshle7lhIGd5UAZiXexYL",
+            id: orderId,
+            to_email: this.props.userSystemData.data[0].email,
+            accessToken: "7717287bb3920229e72ce310ae21e85c",
+            address: address,
+            products: products
+        };
+        emailjs
+            .send(
+                "Jim_aquarium",
+                "Jim_self",
+                templateSelfParam,
+                "user_Fshle7lhIGd5UAZiXexYL"
+            )
+            .then(
+                (result) => {
+                    console.log(result.text);
+                },
+                (error) => {
+                    console.log(error.text);
+                }
+            );
+        emailjs
+            .send(
+                "Jim_aquarium",
+                "Jim_customer",
+                templateClientParam,
+                "user_Fshle7lhIGd5UAZiXexYL"
+            )
+            .then(
+                (result) => {
+                    console.log(result.text);
+                },
+                (error) => {
+                    console.log(error.text);
+                }
+            );
     }
 
     render() {
@@ -332,7 +437,7 @@ class AddAddressComponent extends React.Component {
                                style={{
                                    width: ScreenWidth / 2,
                                    height: ScreenWidth / 2,
-                                    borderRadius: 50,
+                                   borderRadius: 50,
                                    overlayColor: theme.mainBg,
 
                                    shadowColor: "black",
@@ -423,7 +528,7 @@ class AddAddressComponent extends React.Component {
                             textAlign: "center",
                             color: theme.darkTextColor
                         }} onBlur={() => {
-                               this.checkDelivery();
+                            this.checkDelivery();
 
                         }} value={this.state.pincode} placeholder={"Pincode"}
                                    keyboardType={"numeric"}
@@ -507,10 +612,12 @@ class AddAddressComponent extends React.Component {
                         <TouchableOpacity
                             onPress={() => {
                                 this.updateAndPlaceOrder();
+
                             }}
+                            disabled={this.state.checkingDelivery}
                             activeOpacity={0.8}
                             style={{
-                                backgroundColor: theme.decorColor,
+                                backgroundColor: this.state.checkingDelivery ? theme.lightTextColor : theme.decorColor,
                                 width: ScreenWidth - 100, height: 50, borderRadius: 10,
                                 marginTop: 5,
                                 justifyContent: "center",
@@ -525,9 +632,13 @@ class AddAddressComponent extends React.Component {
 
                                 elevation: 5,
                             }}>
-                            <Text style={{textAlign: "center", color: theme.mainBg, fontWeight: "bold"}}>
-                                Place the Order
-                            </Text>
+                            {this.state.checkingDelivery ?
+                            <ActivityIndicator color={theme.decorColor} />:
+                                <Text style={{textAlign: "center", color: theme.mainBg, fontWeight: "bold"}}>
+                                    Place the Order
+                                </Text>
+                            }
+
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -22,6 +22,10 @@ export const WSH_GET_LOAD = 'WSH_GET_LOAD';
 export const WSH_GET_SUCCESS = "WSH_GET_SUCCESS";
 export const WSH_GET_ERR = "WSH_GET_ERR";
 
+export const ORD_GET_LOAD = 'ORD_GET_LOAD';
+export const ORD_GET_SUCCESS = "ORD_GET_SUCCESS";
+export const ORD_GET_ERR = "ORD_GET_ERR";
+
 export const PROD_GET_LOAD = 'PROD_GET_LOAD';
 export const PROD_GET_SUCCESS = "PROD_GET_SUCCESS";
 export const PROD_GET_ERR = "PROD_GET_ERR";

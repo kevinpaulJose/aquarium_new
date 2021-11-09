@@ -84,10 +84,14 @@ class TopComponentHome extends React.Component {
                             borderWidth: 1
                         }}>
                             <Icon
-                                name="log-out-outline"
+                                name="person-outline"
                                 type="ionicon"
                                 color={theme.darkTextColor}
                                 size={26}
+                                onPress={() => {
+                                    this.props.navigation.navigate("Profile")
+                                }
+                                }
                                 // onPress={() => {
                                 //     Alert.alert(
                                 //         "Log Out",
@@ -132,7 +136,7 @@ class TopComponentHome extends React.Component {
                                 color={theme.darkTextColor}
                                 size={26}
                                 onPress={() => {
-                                    this.props.navigation.pop()
+                                    this.props.navigation.navigate("Home")
                                 }
                                 }
 
@@ -174,7 +178,8 @@ class TopComponentHome extends React.Component {
 
                             />
                             {this.props.cartData.data.length > 0 &&
-                            <Badge value={this.props.cartData.data.length} containerStyle={{position: "absolute", top: -5, right: -5}}
+                            <Badge value={this.props.cartData.data.length}
+                                   containerStyle={{position: "absolute", top: -5, right: -5}}
                                    badgeStyle={{
                                        backgroundColor: theme.badgeColor,
                                        width: 20,

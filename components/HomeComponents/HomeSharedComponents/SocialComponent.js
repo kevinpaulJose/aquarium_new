@@ -94,7 +94,7 @@ export default SocialComponent = () => {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={1}
-          // onPress={() => Linking.openURL(theme.url.whatsapp)}
+          onPress={() => Linking.openURL("https://wa.me/%2B919442964818")}
           style={{
             // width: (windowWidth - 40) / 5,
             // height: 60,

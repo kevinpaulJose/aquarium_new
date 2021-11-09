@@ -23,7 +23,7 @@ import {
     getUser,
     getCart,
     getWish,
-    getProduct, getAddress,
+    getProduct, getAddress, getOrders,
 } from "../../redux/ActionCreators";
 import {Alert} from "react-native";
 import TopComponentHome from "./HomeSharedComponents/TopComponent";
@@ -47,7 +47,8 @@ const mapDispatchToProps = (dispatch) => ({
     getCart: (uid) => dispatch(getCart(uid)),
     getWish: (uid) => dispatch(getWish(uid)),
     getProduct: () => dispatch(getProduct()),
-    getAddress: (uid) => dispatch(getAddress(uid))
+    getAddress: (uid) => dispatch(getAddress(uid)),
+    getOrders: (uid) => dispatch(getOrders(uid))
 });
 
 
@@ -59,6 +60,7 @@ class HomeComponent extends React.Component {
     componentDidMount() {
         this.props.getCart(this.props.userSystemData.data[0].userid);
         this.props.getAddress(this.props.userSystemData.data[0].userid);
+        this.props.getOrders(this.props.userSystemData.data[0].userid);
     }
 
     _renderLine = () => (
