@@ -90,13 +90,17 @@ class FoodCatComponent extends React.Component {
                     {
                         this.props.prodData.isLoading ? <View><ActivityIndicator/></View> :
 
-                            <View style={{marginTop: 20, flexDirection: "row", flexWrap: "wrap"}}>
+                            <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate("ProdDetails", {
+                                item: product
+                            })} style={{marginTop: 20, flexDirection: "row", flexWrap: "wrap"}}>
                                 {this.props.prodData.data
                                     .filter(product => (product.category === "food") && (parseInt(product.stock) > 0))
                                     .slice(0, 4)
                                     .map((product, key) => (
                                         // <Text key={product.productId}>{product.name}</Text>
-                                        <View style={{
+                                        <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate("ProdDetails", {
+                                            item: product
+                                        })} style={{
                                             width: (ScreenWidth - 50) / 2,
                                             height: 230,
                                             borderRadius: 20,
@@ -296,9 +300,9 @@ class FoodCatComponent extends React.Component {
                                             </View>
 
 
-                                        </View>
+                                        </TouchableOpacity>
                                     ))}
-                            </View>
+                            </TouchableOpacity>
                     }
 
 

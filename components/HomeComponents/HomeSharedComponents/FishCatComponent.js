@@ -72,7 +72,7 @@ class FishCatComponent extends React.Component {
                                       onPress={() => this.props.navigation.navigate("Specific", {item: "fish"})}
                                       style={{
                                           width: ScreenWidth - 40,
-                                          backgroundColor: "blue",
+                                          // backgroundColor: "blue",
                                           height: 190,
                                           marginTop: 1,
                                           borderRadius: 20
@@ -90,7 +90,9 @@ class FishCatComponent extends React.Component {
                                     .slice(0, 4)
                                     .map((product, key) => (
                                         // <Text key={product.productId}>{product.name}</Text>
-                                        <View style={{
+                                        <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate("ProdDetails", {
+                                            item: product
+                                        })} style={{
                                             width: (ScreenWidth - 50) / 2,
                                             height: 230,
                                             borderRadius: 20,
@@ -288,7 +290,7 @@ class FishCatComponent extends React.Component {
                                             </View>
 
 
-                                        </View>
+                                        </TouchableOpacity>
                                     ))}
                             </View>
                     }

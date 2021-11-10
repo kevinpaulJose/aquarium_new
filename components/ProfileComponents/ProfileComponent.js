@@ -51,12 +51,7 @@ class ProfileComponent extends React.Component {
         super(props);
         this.state = {};
     }
-
-    componentDidMount() {
-        getCart(this.props.userSystemData.data.userid);
-        // console.log(this.props.cartData);
-        // console.log(this.props.userSystemData)
-    }
+    
 
 
     _logOutComponent = () => (
@@ -86,18 +81,19 @@ class ProfileComponent extends React.Component {
                               );
 
                           }}
-                          style={{marginTop: 30, alignItems: "center"}}>
+                          style={{marginTop: 10, alignItems: "center"}}>
             <View style={{
                 width: ScreenWidth - 50,
                 borderRadius: 20,
                 height: 50,
-                borderWidth: 1,
+                borderWidth: 0.2,
                 borderColor: theme.badgeColor,
-                backgroundColor: "#f6f0f0",
+                // backgroundColor: theme.badgeColor,
+                // backgroundColor: "#f6f0f0",
                 justifyContent: "center",
                 alignItems: "center"
             }}>
-                <Text style={{fontSize: 17, color: theme.badgeColor}}>Log Out</Text>
+                <Text style={{fontSize: 17, color: theme.badgeColor, fontWeight: "normal"}}>Log Out</Text>
             </View>
 
         </TouchableOpacity>
@@ -116,12 +112,18 @@ class ProfileComponent extends React.Component {
             marginBottom: 30
         }}>
             <View
-                style={{marginTop: 10, alignItems: "center"}}
+                style={{marginTop: 20, alignItems: "flex-start", marginLeft: 10}}
             >
-                <Text style={{fontSize: 18, fontWeight: "bold", color: theme.primaryDark}}>Your Orders</Text>
+                <Text style={{fontSize: 18, color: theme.primaryDark}}>Your Orders</Text>
             </View>
 
-            <View style={{width: ScreenWidth - 70, marginLeft: 10, marginBottom: 20, backgroundColor: theme.textBg, borderRadius: 20}}>
+            <View style={{
+                width: ScreenWidth - 70,
+                marginLeft: 10,
+                marginBottom: 20,
+                backgroundColor: theme.textBg,
+                borderRadius: 20
+            }}>
                 {this.props.orderData.data.map((item, key) => (
                     this._renderOrderCard({item: item}, {key: key})
                 ))}
@@ -160,7 +162,7 @@ class ProfileComponent extends React.Component {
                     size={16}
                     onPress={() => {
                         console.log(item.id)
-                        let messageURL = "https://wa.me/%2B919442964818?text=Hi,%20I%20need%20help%20with%20this%20order%20"+item.id
+                        let messageURL = "https://wa.me/%2B919442964818?text=Hi,%20I%20need%20help%20with%20this%20order%20" + item.id
                         Linking.openURL(messageURL);
                     }
                     }
@@ -168,7 +170,8 @@ class ProfileComponent extends React.Component {
             </View>
             <Text style={{fontWeight: "normal", fontSize: 10, color: theme.primaryDark}}>Order #{item.id}</Text>
             {!item.address.servicable &&
-            <Text style={{fontWeight: "normal", fontSize: 10, color: theme.badgeColor}}>This order may not be servicable.</Text>
+            <Text style={{fontWeight: "normal", fontSize: 10, color: theme.badgeColor}}>This order may not be
+                servicable.</Text>
             }
             {item.products.map((i, k) => {
                 console.log(i.image)
@@ -193,7 +196,10 @@ class ProfileComponent extends React.Component {
                         <View style={{flexDirection: "column", marginLeft: 5}}>
                             <View style={{marginTop: 5, marginLeft: 5, flexDirection: "row"}}>
                                 <Text style={{color: theme.darkTextColor}}>{i.name}</Text>
-                                <Text style={{marginLeft: 5, color: theme.lightTextColor}}>(₹{i.number*i.netPrice})</Text>
+                                <Text style={{
+                                    marginLeft: 5,
+                                    color: theme.lightTextColor
+                                }}>(₹{i.number * i.netPrice})</Text>
                             </View>
                             <View style={{marginTop: 5, marginLeft: 5}}>
                                 <Text style={{color: theme.lightTextColor}}>x {i.number}</Text>
@@ -214,6 +220,19 @@ class ProfileComponent extends React.Component {
     render() {
         return (
             <ScrollView>
+                <View style={{
+                    marginTop: 30,
+                    marginLeft: 25,
+                    // backgroundColor: "red",
+                    width: ScreenWidth - 50,
+                    height: 40,
+                    justifyContent: "center"
+                }}>
+                    {this.props.userSystemData.data.length > 0 &&
+                    <Text style={{fontSize: 20, color: theme.primaryDark}}>Hello {this.props.userSystemData.data[0].username}!</Text>
+                    }
+
+                </View>
                 <this._logOutComponent/>
                 {this.props.orderData.isLoading &&
                 <View style={{marginTop: 20}}>

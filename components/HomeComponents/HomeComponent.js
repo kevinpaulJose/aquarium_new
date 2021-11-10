@@ -8,7 +8,7 @@ import {
     Easing,
 } from "react-native";
 import {SafeAreaView, ScrollView, View, Animated} from "react-native";
-import {Badge, Button, Overlay, Text} from "react-native-elements";
+import {Badge, Button, Overlay, SearchBar, Text} from "react-native-elements";
 import {connect} from "react-redux";
 import {theme} from "../Dimensions/defaults";
 import {Icon} from "react-native-elements";
@@ -57,6 +57,7 @@ class HomeComponent extends React.Component {
         super(props);
         this.state = {};
     }
+
     componentDidMount() {
         this.props.getCart(this.props.userSystemData.data[0].userid);
         this.props.getAddress(this.props.userSystemData.data[0].userid);
@@ -73,11 +74,24 @@ class HomeComponent extends React.Component {
         }}/>
     )
 
+    _renderSearch = () => (
+        <SearchBar inputStyle={{fontSize: 15}} containerStyle={{
+            marginTop: 20,
+            backgroundColor: theme.mainBg,
+            // backgroundColor: "red",
+            height: 50
+        }}
+                   inputContainerStyle={{backgroundColor: theme.mainBg, height: 20}} lightTheme={true}
+                   placeholder={"Search Products"}
+                   onFocus={() => this.props.navigation.navigate("Search")}/>
+    )
+
 
     render() {
         return (
 
             <ScrollView>
+                <this._renderSearch/>
                 <FishCatComponent navigation={this.props.navigation}/>
                 <this._renderLine/>
                 <TankCatComponent navigation={this.props.navigation}/>

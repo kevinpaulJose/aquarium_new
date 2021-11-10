@@ -17,6 +17,8 @@ import {theme} from "./Dimensions/defaults";
 import CartComponent from "./CartComponents/CartComponent";
 import AddAddressComponent from "./AddressComponents/AddAddressComponent";
 import ProfileComponent from "./ProfileComponents/ProfileComponent";
+import ProdDetailsComponent from "./HomeComponents/HomeSharedComponents/ProdDetailsComponent";
+import SearchComponent from "./SearchComponents/SearchComponent";
 
 const Stack = createStackNavigator();
 
@@ -118,6 +120,16 @@ class Nav extends React.Component {
                                 }
                                 name="AddAddress" component={AddAddressComponent}/>
                             <Stack.Screen
+                            options={({route, navigation}) => ({
+                                headerTitle: (props) => <TopComponentHome back navigation={navigation}/>,
+                                headerStyle: {
+                                    backgroundColor: theme.mainBg
+                                },
+                                headerLeft: () => null,
+                            })
+                            }
+                            name="Profile" component={ProfileComponent}/>
+                            <Stack.Screen
                                 options={({route, navigation}) => ({
                                     headerTitle: (props) => <TopComponentHome back navigation={navigation}/>,
                                     headerStyle: {
@@ -126,7 +138,17 @@ class Nav extends React.Component {
                                     headerLeft: () => null,
                                 })
                                 }
-                                name="Profile" component={ProfileComponent}/>
+                                name="ProdDetails" component={ProdDetailsComponent}/>
+                            <Stack.Screen
+                                options={({route, navigation}) => ({
+                                    headerTitle: (props) => <TopComponentHome back navigation={navigation}/>,
+                                    headerStyle: {
+                                        backgroundColor: theme.mainBg
+                                    },
+                                    headerLeft: () => null,
+                                })
+                                }
+                                name="Search" component={SearchComponent}/>
                         </Stack.Group>
                     )}
                 </Stack.Navigator>

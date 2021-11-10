@@ -103,7 +103,9 @@ class SpecificCatComponent extends React.Component {
                                         // .slice(0, 4)
                                         .map((product, key) => (
                                             // <Text key={product.productId}>{product.name}</Text>
-                                            <View style={{
+                                            <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate("ProdDetails", {
+                                                item: product
+                                            })}style={{
                                                 width: (ScreenWidth - 50) / 2,
                                                 height: 230,
                                                 borderRadius: 20,
@@ -305,7 +307,7 @@ class SpecificCatComponent extends React.Component {
                                                 </View>
 
 
-                                            </View>
+                                            </TouchableOpacity>
                                         ))}
                                 </View>
                         }
