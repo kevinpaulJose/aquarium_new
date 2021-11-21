@@ -233,7 +233,9 @@ class FishCatComponent extends React.Component {
                                                         productid: product.productId,
                                                         count: 1
                                                     }
+                                                    // console.error(cartData)
                                                     cartCollection.where("productid", "==", cartData.productid)
+                                                        .where("userid", "==", this.props.userSystemData.data[0].userid)
                                                         .get().then((querySnapshot) => {
                                                         let docID = "";
                                                         let count = 0;
@@ -247,7 +249,9 @@ class FishCatComponent extends React.Component {
                                                                 .then(() => {
                                                                     this.props.getCart(this.props.userSystemData.data[0].userid);
                                                                     this.setState({loading: false})
+                                                                    // console.error(cartData)
                                                                     this.props.navigation.navigate("Cart");
+                                                                    alert("done")
                                                                 }).catch((error) => {
                                                                 this.setState({loading: false});
                                                                 console.error(error)
@@ -257,6 +261,7 @@ class FishCatComponent extends React.Component {
                                                             cartCollection.doc().set(cartData).then(() => {
                                                                 this.props.getCart(this.props.userSystemData.data[0].userid)
                                                                 this.setState({loading: false})
+                                                                // console.error(cartData)
                                                                 this.props.navigation.navigate("Cart");
                                                             }).catch((error) => {
                                                                 alert("Error")

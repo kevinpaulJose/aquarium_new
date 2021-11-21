@@ -20,6 +20,7 @@ export const getUser = () => (dispatch) => {
       // console.log(user.uid)
       userCollection.where("userid", "==", user.uid).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+          // console.error(doc.data())
           dispatch(getUserSuccess(doc.data()));
         }) 
       }).catch((error) => {

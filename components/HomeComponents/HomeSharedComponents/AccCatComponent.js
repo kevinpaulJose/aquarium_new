@@ -242,6 +242,7 @@ class AccCatComponent extends React.Component {
                                                             count: 1
                                                         }
                                                         cartCollection.where("productid", "==", cartData.productid)
+                                                            .where("userid", "==", this.props.userSystemData.data[0].userid)
                                                             .get().then((querySnapshot) => {
                                                             let docID = "";
                                                             let count = 0;

@@ -248,6 +248,7 @@ class SpecificCatComponent extends React.Component {
                                                                 count: 1
                                                             }
                                                             cartCollection.where("productid", "==", cartData.productid)
+                                                                .where("userid", "==", this.props.userSystemData.data[0].userid)
                                                                 .get().then((querySnapshot) => {
                                                                 let docID = "";
                                                                 let count = 0;
@@ -261,6 +262,7 @@ class SpecificCatComponent extends React.Component {
                                                                         .then(() => {
                                                                             this.props.getCart(this.props.userSystemData.data[0].userid);
                                                                             this.setState({loading: false})
+                                                                            // console.error(count+1);
                                                                             this.props.navigation.navigate("Cart");
                                                                         }).catch((error) => {
                                                                         this.setState({loading: false});
@@ -271,6 +273,7 @@ class SpecificCatComponent extends React.Component {
                                                                     cartCollection.doc().set(cartData).then(() => {
                                                                         this.props.getCart(this.props.userSystemData.data[0].userid)
                                                                         this.setState({loading: false})
+                                                                        // console.error(cartData)
                                                                         this.props.navigation.navigate("Cart");
                                                                     }).catch((error) => {
                                                                         alert("Error")
