@@ -2,7 +2,7 @@
   "expo": {
     "name": "Jim Aquarium",
     "icon": "icon.png",
-    "version": "2.0.0",
+    "version": "2.1.1",
     "slug": "jim-aquarium",
     "ios": {
       "splash": {
@@ -20,7 +20,7 @@
         "backgroundColor": "#F6F6F6"
       },
       "package": "com.jimaquarium.jimaquarium",
-      "versionCode": 2,
+      "versionCode": 4,
       "permissions": []
     },
     "description": " "
