@@ -74,48 +74,66 @@ class AddAddressComponent extends React.Component {
 
   checkDelivery = () => {
     this.setState({ checkingDelivery: true });
-    setTimeout(() => {
-      let options = {
-        method: "POST",
-        url: "https://pincode.p.rapidapi.com/",
-        headers: {
-          "content-type": "application/json",
-          "x-rapidapi-key":
-            "270a5bcb65msh877d6ff7f5533c0p19a716jsna517e32edc05",
-          "x-rapidapi-host": "pincode.p.rapidapi.com",
-        },
-        data: { searchBy: "pincode", value: this.state.pincode },
-      };
-      axios
-        .request(options)
-        .then((response) => {
-          this.setState({ checkingDelivery: false });
-          if (response.data.length > 0) {
-            if (response.data[0].district === "Tirunelveli") {
-              this.setState({
-                locationError: false,
-                district: response.data[0].district,
-                state: response.data[0].circle,
-              });
-              console.log("Yes Service");
-            } else {
-              this.setState({
-                locationError: true,
-                district: response.data[0].district,
-                state: response.data[0].circle,
-              });
+    setTimeout(
+      () => {
+        const pincode = parseInt(this.state.pincode);
+        let _2dig = parseInt(pincode / 10000);
+        console.log(_2dig);
+        if (_2dig >= 60 || _2dig <= 64) {
+          let options = {
+            method: "POST",
+            url: "https://pincode.p.rapidapi.com/",
+            headers: {
+              "content-type": "application/json",
+              "x-rapidapi-key":
+                "270a5bcb65msh877d6ff7f5533c0p19a716jsna517e32edc05",
+              "x-rapidapi-host": "pincode.p.rapidapi.com",
+            },
+            data: { searchBy: "pincode", value: this.state.pincode },
+          };
+          axios
+            .request(options)
+            .then((response) => {
+              this.setState({ checkingDelivery: false });
+              if (response.data.length > 0) {
+                console.log(response.data);
+                // if (response.data[0].district === "Tirunelveli") {
+                //   this.setState({
+                //     locationError: false,
+                //     district: response.data[0].district,
+                //     state: response.data[0].circle,
+                //   });
+                //   console.log("Yes Service");
+                // } else {
+                // this.setState({
+                //   locationError: true,
+                //   district: response.data[0].district,
+                //   state: response.data[0].circle,
+                // });
+                // console.log("No Service");
+                // }
+                this.setState({
+                  locationError: false,
+                  district: response.data[0].district,
+                  state: response.data[0].circle,
+                });
+                console.log("Yes Service");
+              } else {
+                this.setState({ locationError: true });
+                console.log("No Service");
+              }
+            })
+            .catch((error) => {
+              this.setState({ locationError: true, checkingDelivery: false });
               console.log("No Service");
-            }
-          } else {
-            this.setState({ locationError: true });
-            console.log("No Service");
-          }
-        })
-        .catch((error) => {
+            });
+        } else {
           this.setState({ locationError: true, checkingDelivery: false });
-          console.log("No Service");
-        });
-    }, 2000);
+        }
+      },
+
+      2000
+    );
   };
 
   updateAndPlaceOrder = () => {
@@ -205,9 +223,9 @@ class AddAddressComponent extends React.Component {
                 .doc()
                 .set(setOrderData)
                 .then(() => {
-                  if (!this.state.locationError) {
-                    this.sendEmails({ orderId: orderId });
-                  }
+                  // if (!this.state.locationError) {
+                  this.sendEmails({ orderId: orderId });
+                  // }
                   this.props.getOrders(
                     this.props.userSystemData.data[0].userid
                   );
@@ -380,6 +398,7 @@ class AddAddressComponent extends React.Component {
     }
   };
   sendEmails = ({ orderId }) => {
+    // alert("Initiated sending email");
     console.log("Called");
     let address =
       this.state.name +
@@ -422,54 +441,58 @@ class AddAddressComponent extends React.Component {
     });
     // console.log(products);
     let templateSelfParam = {
-      service_id: "Jim_aquarium",
+      service_id: "service_k9dn8vb",
       template_id: "Jim_self",
-      user_id: "user_Fshle7lhIGd5UAZiXexYL",
+      user_id: "WxeUTIQSYT8gSNJHg",
       id: orderId,
       to_email: "jimaquarium@gmail.com",
-      accessToken: "7717287bb3920229e72ce310ae21e85c",
+      accessToken: "eR34uiwq9ROP-iNmRLa06",
       address: address,
       phone: this.state.phoneno,
       products: products,
     };
     let templateClientParam = {
-      service_id: "Jim_aquarium",
+      service_id: "service_k9dn8vb",
       template_id: "Jim_customer",
-      user_id: "user_Fshle7lhIGd5UAZiXexYL",
+      user_id: "WxeUTIQSYT8gSNJHg",
       id: orderId,
       to_email: this.props.userSystemData.data[0].email,
-      accessToken: "7717287bb3920229e72ce310ae21e85c",
+      accessToken: "eR34uiwq9ROP-iNmRLa06",
       address: address,
       products: products,
     };
     emailjs
       .send(
-        "Jim_aquarium",
+        "service_k9dn8vb",
         "Jim_self",
         templateSelfParam,
-        "user_Fshle7lhIGd5UAZiXexYL"
+        "WxeUTIQSYT8gSNJHg"
       )
       .then(
         (result) => {
           console.log(result.text);
+          // alert("Email sent");
         },
         (error) => {
-          console.log(error.text);
+          console.error(error.text);
+          // alert("Error sending email");
         }
       );
     emailjs
       .send(
-        "Jim_aquarium",
+        "service_k9dn8vb",
         "Jim_customer",
         templateClientParam,
-        "user_Fshle7lhIGd5UAZiXexYL"
+        "WxeUTIQSYT8gSNJHg"
       )
       .then(
         (result) => {
           console.log(result.text);
+          // alert("Email sent");
         },
         (error) => {
           console.log(error.text);
+          // alert("Error Email sent");
         }
       );
   };
