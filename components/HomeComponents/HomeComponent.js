@@ -7,7 +7,7 @@ import {
   Platform,
   Easing,
 } from "react-native";
-import { SafeAreaView, ScrollView, View, Animated } from "react-native";
+import { ScrollView, View, Animated } from "react-native";
 import { Badge, Button, Overlay, SearchBar, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { theme } from "../Dimensions/defaults";

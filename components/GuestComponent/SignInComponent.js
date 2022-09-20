@@ -7,7 +7,7 @@ import {
   Platform,
   Easing,
 } from "react-native";
-import { SafeAreaView, ScrollView, View, Animated } from "react-native";
+import { ScrollView, View, Animated } from "react-native";
 import { Button, Overlay, Text } from "react-native-elements";
 import { connect } from "react-redux";
 import { theme } from "../Dimensions/defaults";
@@ -248,7 +248,6 @@ class SignInComponent extends React.Component {
     );
   };
 
-
   showRegAlert = (title, message) =>
     Alert.alert(
       title,
@@ -268,7 +267,7 @@ class SignInComponent extends React.Component {
         cancelable: true,
       }
     );
-    showForgetAlert = (title, message) =>
+  showForgetAlert = (title, message) =>
     Alert.alert(
       title,
       message,
@@ -341,7 +340,7 @@ class SignInComponent extends React.Component {
         <View
           style={{
             width: ScreenWidth,
-            height:ScreenHeight + ScreenHeight / 2,
+            height: ScreenHeight + ScreenHeight / 2,
             backgroundColor: theme.mainBg,
           }}
         >
