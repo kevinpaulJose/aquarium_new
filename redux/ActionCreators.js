@@ -1,8 +1,8 @@
 import * as ActionTypes from "./ActionTypes";
 import * as SecureStore from "expo-secure-store";
-import firebase from 'firebase'
+import firebase from "firebase";
 import User from "../datatypes/user";
-import "../firebase/config"
+import "../firebase/config";
 
 const userCollection = firebase.firestore().collection("users");
 const cartCollection = firebase.firestore().collection("cart");
@@ -11,102 +11,97 @@ const productCollection = firebase.firestore().collection("products");
 const addressCollection = firebase.firestore().collection("address");
 const ordersCollection = firebase.firestore().collection("orders");
 
-
-
 export const getUser = () => (dispatch) => {
-    dispatch(getUserLoading());
-    var user = firebase.auth().currentUser;
-    if (user) {
-      // console.log(user.uid)
-      userCollection.where("userid", "==", user.uid).get().then((querySnapshot) => {
+  dispatch(getUserLoading());
+  var user = firebase.auth().currentUser;
+  if (user) {
+    // console.log(user.uid)
+    userCollection
+      .where("userid", "==", user.uid)
+      .get()
+      .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           // console.error(doc.data())
           dispatch(getUserSuccess(doc.data()));
-        }) 
-      }).catch((error) => {
-        dispatch(getUserSuccess(false));
-        dispatch(getUserError(true))
+        });
       })
-      //  dispatch(getUserSuccess(userGot));
-      } else {
+      .catch((error) => {
         dispatch(getUserSuccess(false));
-        dispatch(getUserError(true))
-      }
+        dispatch(getUserError(true));
+      });
+    //  dispatch(getUserSuccess(userGot));
+  } else {
+    dispatch(getUserSuccess(false));
+    dispatch(getUserError(true));
+  }
+};
+export const getUserLoading = () => ({
+  type: ActionTypes.USR_GET_LOAD,
+  payload: true,
+});
+export const getUserSuccess = (user) => ({
+  type: ActionTypes.USR_GET_SUCCESS,
+  payload: user,
+});
+export const getUserError = (err) => ({
+  type: ActionTypes.USR_GET_ERR,
+  payload: err,
+});
 
-  };
-  export const getUserLoading = () => ({
-    type: ActionTypes.USR_GET_LOAD,
-    payload: true,
-  });
-  export const getUserSuccess = (user) => ({
-    type: ActionTypes.USR_GET_SUCCESS,
-    payload: user,
-  });
-  export const getUserError = (err) => ({
-    type: ActionTypes.USR_GET_ERR,
-    payload: err,
-  });
-
-
-
-
-
-
-
-
-  export const getCart = (uid) => (dispatch) => {
-    dispatch(getCartLoading());
-    if(uid == null) {
-      dispatch(getCartSuccess([]));
-    }else {
-      cartCollection.where("userid", "==", uid).get().then((querySnapshot) => {
+export const getCart = (uid) => (dispatch) => {
+  dispatch(getCartLoading());
+  if (uid == null) {
+    dispatch(getCartSuccess([]));
+  } else {
+    cartCollection
+      .where("userid", "==", uid)
+      .get()
+      .then((querySnapshot) => {
         let temp = [];
-        querySnapshot.forEach((doc)=> {
+        querySnapshot.forEach((doc) => {
           temp.push(doc.data());
-          console.log(doc.data())
-        })
+          console.log(doc.data());
+        });
         dispatch(getCartSuccess(temp));
-      }).catch((error) => {
-        dispatch(getCartError(error))
       })
-    }
-
-
-
-  };
-  export const getCartLoading = () => ({
-    type: ActionTypes.CRT_GET_LOAD,
-    payload: true,
-  });
-  export const getCartSuccess = (cartData) => ({
-    type: ActionTypes.CRT_GET_SUCCESS,
-    payload: cartData,
-  });
-  export const getCartError = (err) => ({
-    type: ActionTypes.CRT_GET_ERR,
-    payload: err,
-  });
-
+      .catch((error) => {
+        dispatch(getCartError(error));
+      });
+  }
+};
+export const getCartLoading = () => ({
+  type: ActionTypes.CRT_GET_LOAD,
+  payload: true,
+});
+export const getCartSuccess = (cartData) => ({
+  type: ActionTypes.CRT_GET_SUCCESS,
+  payload: cartData,
+});
+export const getCartError = (err) => ({
+  type: ActionTypes.CRT_GET_ERR,
+  payload: err,
+});
 
 export const getAddress = (uid) => (dispatch) => {
   dispatch(getAddressLoading());
-  if(uid == null) {
+  if (uid == null) {
     dispatch(getAddressSuccess([]));
-  }else {
-    addressCollection.where("userid", "==", uid).get().then((querySnapshot) => {
-      let temp = [];
-      querySnapshot.forEach((doc)=> {
-        temp.push(doc.data());
-        console.log(doc.data())
+  } else {
+    addressCollection
+      .where("userid", "==", uid)
+      .get()
+      .then((querySnapshot) => {
+        let temp = [];
+        querySnapshot.forEach((doc) => {
+          temp.push(doc.data());
+          console.log(doc.data());
+        });
+        dispatch(getAddressSuccess(temp));
       })
-      dispatch(getAddressSuccess(temp));
-    }).catch((error) => {
-      dispatch(getAddressError(error))
-    })
+      .catch((error) => {
+        dispatch(getAddressError(error));
+      });
   }
-
-
-
 };
 export const getAddressLoading = () => ({
   type: ActionTypes.ADD_GET_LOAD,
@@ -121,29 +116,28 @@ export const getAddressError = (err) => ({
   payload: err,
 });
 
-
 export const getOrders = (uid) => (dispatch) => {
   dispatch(getOrdersLoading());
-  if(uid == null) {
+  if (uid == null) {
     dispatch(getOrdersSuccess([]));
-  }else {
-    ordersCollection.where("userid", "==", uid)
-        .orderBy("timestamp", "desc")
-        .get().then((querySnapshot) => {
-      let temp = [];
-      querySnapshot.forEach((doc)=> {
-        temp.push(doc.data());
-        console.log(doc.data())
+  } else {
+    ordersCollection
+      .where("userid", "==", uid)
+      .orderBy("timestamp", "desc")
+      .get()
+      .then((querySnapshot) => {
+        let temp = [];
+        querySnapshot.forEach((doc) => {
+          temp.push(doc.data());
+          console.log(doc.data());
+        });
+        dispatch(getOrdersSuccess(temp));
       })
-      dispatch(getOrdersSuccess(temp));
-    }).catch((error) => {
-      dispatch(getOrdersError(error))
-      console.error(error)
-    })
+      .catch((error) => {
+        dispatch(getOrdersError(error));
+        console.error(error);
+      });
   }
-
-
-
 };
 export const getOrdersLoading = () => ({
   type: ActionTypes.ORD_GET_LOAD,
@@ -158,74 +152,61 @@ export const getOrdersError = (err) => ({
   payload: err,
 });
 
+export const getWish = (uid) => (dispatch) => {
+  dispatch(getCartLoading());
 
-  export const getWish = (uid) => (dispatch) => {
-    dispatch(getCartLoading());
-
-    wishCollection.where("userid", "==", uid).get().then((querySnapshot) => {
+  wishCollection
+    .where("userid", "==", uid)
+    .get()
+    .then((querySnapshot) => {
       let temp = [];
-      querySnapshot.forEach((doc)=> {
+      querySnapshot.forEach((doc) => {
         temp.push(doc.data());
-      })
+      });
       dispatch(getWishSuccess(temp));
-    }).catch((error) => {
-      dispatch(getWishError(error))
     })
+    .catch((error) => {
+      dispatch(getWishError(error));
+    });
+};
+export const getWishLoading = () => ({
+  type: ActionTypes.WSH_GET_LOAD,
+  payload: true,
+});
+export const getWishSuccess = (cartData) => ({
+  type: ActionTypes.WSH_GET_SUCCESS,
+  payload: cartData,
+});
+export const getWishError = (err) => ({
+  type: ActionTypes.WSH_GET_ERR,
+  payload: err,
+});
 
-  };
-  export const getWishLoading = () => ({
-    type: ActionTypes.WSH_GET_LOAD,
-    payload: true,
-  });
-  export const getWishSuccess = (cartData) => ({
-    type: ActionTypes.WSH_GET_SUCCESS,
-    payload: cartData,
-  });
-  export const getWishError = (err) => ({
-    type: ActionTypes.WSH_GET_ERR,
-    payload: err,
-  });
+export const getProduct = () => (dispatch) => {
+  dispatch(getProductLoading());
 
-
-
-  export const getProduct= () => (dispatch) => {
-    dispatch(getProductLoading());
-
-    productCollection.get().then((querySnapshot) => {
+  productCollection
+    .get()
+    .then((querySnapshot) => {
       let temp = [];
-      querySnapshot.forEach((doc)=> {
+      querySnapshot.forEach((doc) => {
         temp.push(doc.data());
-      })
+      });
       dispatch(getProductSuccess(temp));
-    }).catch((error) => {
-      dispatch(getProductError(error))
     })
-
-  };
-  export const getProductLoading = () => ({
-    type: ActionTypes.PROD_GET_LOAD,
-    payload: true,
-  });
-  export const getProductSuccess = (cartData) => ({
-    type: ActionTypes.PROD_GET_SUCCESS,
-    payload: cartData,
-  });
-  export const getProductError = (err) => ({
-    type: ActionTypes.PROD_GET_ERR,
-    payload: err,
-  });
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
+    .catch((error) => {
+      dispatch(getProductError(error));
+    });
+};
+export const getProductLoading = () => ({
+  type: ActionTypes.PROD_GET_LOAD,
+  payload: true,
+});
+export const getProductSuccess = (cartData) => ({
+  type: ActionTypes.PROD_GET_SUCCESS,
+  payload: cartData,
+});
+export const getProductError = (err) => ({
+  type: ActionTypes.PROD_GET_ERR,
+  payload: err,
+});

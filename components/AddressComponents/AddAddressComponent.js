@@ -30,7 +30,7 @@ import {
 } from "../../redux/ActionCreators";
 import { getTimeEpoch } from "../../firebase/functions";
 import axios from "axios";
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser";
 
 const mapStateToProps = (state) => {
   return {
